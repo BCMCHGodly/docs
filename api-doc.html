@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SSO Validate API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f9fafc;
+            color: #222;
+        }
+
+        h1 {
+            color: #0b4f8a;
+        }
+
+        .box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #0b4f8a;
+            color: white;
+        }
+
+        pre {
+            background: #111;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+
+        code {
+            font-family: Consolas, monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="text-align: center;">
+        <img src="https://www.bcmch.org/asset/images/logo.webp">
+    </div>
+
+    <h1 style="text-align: center;">BCMCH SSO Validate API Documentation</h1>
+
+    <!-- Overview -->
+    <div class="box">
+        <h2>Overview</h2>
+        <p>
+            The <b>SSO Validate API</b> is used to authenticate BCMCH staff users through the Single Sign-On system.
+            If valid, it returns a JWT token and employee mapping details.
+        <p>
+            Contact the IT department for clientId and clientSecret required for API access.<br />
+            itsupport@bcmch.org, behive@bcmch.org
+        </p>
+        </p>
+    </div>
+
+    <!-- Endpoint -->
+    <div class="box">
+        <h2>Endpoint</h2>
+        <p><b>POST</b> <code>/sso/validate</code></p>
+    </div>
+
+    <!-- Request -->
+    <div class="box">
+        <h2>Request Body</h2>
+
+        <pre>{
+  "username": "ituser1",
+  "password": "it@1234",
+  "clientId": "{ClientId}",
+  "clientSecret": "{ClientSecret}"
+}</pre>
+
+        <h3>Request Parameters</h3>
+        <table>
+            <tr>
+                <th>Parameter</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>username</td>
+                <td>string</td>
+                <td>User login username (SSO/ESSP)</td>
+            </tr>
+            <tr>
+                <td>password</td>
+                <td>string</td>
+                <td>User password</td>
+            </tr>
+            <tr>
+                <td>clientId</td>
+                <td>string</td>
+                <td>Client application identifier</td>
+            </tr>
+            <tr>
+                <td>clientSecret</td>
+                <td>string</td>
+                <td>Client secret key for secure API access</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Success Response -->
+    <div class="box">
+        <h2>Success Response</h2>
+
+        <pre>{
+  "token": "eyJhbGc...",
+  "username": "godly...",
+  "status": true,
+  "fullName": "Godly ....",
+  "employeeCode": "0000",
+  "hisUserName": "user",
+  "designation": "",
+  "department": ""
+}</pre>
+    </div>
+
+    <!-- Unauthorized Response -->
+    <div class="box">
+        <h2>Unauthorized Response</h2>
+
+        <pre>{
+  "status": false,
+  "message": "Invalid username or password"
+}</pre>
+    </div>
+
+    <!-- Coding Scripts -->
+    <div class="box">
+        <h2>Coding Scripts (Integration Examples)</h2>
+        <p>Developers can use the following examples to call this API:</p>
+
+        <!-- C# -->
+        <h3>1. C# Example (HttpClient)</h3>
+        <pre><code>
+using System;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+
+class Program
+{
+    static async Task Main()
+    {
+        var url = "https://{base_url}/sso/validate";
+
+        var requestBody = new
+        {
+            username = "ituser1",
+            password = "it@1234",
+            clientId = "{ClientId}",
+            clientSecret = "{ClientSecret}"
+        };
+
+        using (HttpClient client = new HttpClient())
+        {
+            var json = JsonConvert.SerializeObject(requestBody);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync(url, content);
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
+        }
+    }
+}
+</code></pre>
+
+        <!-- PHP -->
+        <h3>2. PHP Example (cURL)</h3>
+        <pre><code>
+<?php
+
+$url = "https://{base_url}/sso/validate";
+
+$data = [
+    "username" => "ituser1",
+    "password" => "it@1234",
+    "clientId" => "{ClientId}",
+    "clientSecret" => "{ClientSecret}"
+];
+
+$payload = json_encode($data);
+
+$ch = curl_init($url);
+
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    "Content-Type: application/json"
+]);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+
+$response = curl_exec($ch);
+curl_close($ch);
+
+echo $response;
+
+?>
+</code></pre>
+
+        <!-- Node.js -->
+        <h3>3. Node.js Example (Axios)</h3>
+        <pre><code>
+const axios = require("axios");
+
+const url = "https://{base_url}/sso/validate";
+
+const requestBody = {
+  username: "ituser1",
+  password: "it@1234",
+  clientId: "{ClientId}",
+  clientSecret: "{ClientSecret}"
+};
+
+axios.post(url, requestBody, {
+  headers: {
+    "Content-Type": "application/json"
+  }
+})
+.then(response => {
+  console.log("Success:", response.data);
+})
+.catch(error => {
+  console.log("Error:", error.response.data);
+});
+</code></pre>
+
+    </div>
+<footer style="
+    margin-top: 50px;
+    padding: 20px;
+    text-align: center;
+    font-size: 13px;
+    color: #555;
+    border-top: 1px solid #ddd;
+    background: #f1f5f9;
+    border-radius: 10px;
+">
+
+    <p style="margin: 5px;">
+        © 2026 <b>Believers Church Medical College Hospital (BCMCH)</b>. All Rights Reserved.
+    </p>
+
+    <p style="margin: 5px;">
+        St. Thomas Nagar, Kuttapuzha P.O, Thiruvalla, Kerala – 689103, India
+    </p>
+
+    <p style="margin: 5px;">
+        Website: 
+        <a href="https://www.bcmch.org/" target="_blank" style="color:#0b4f8a; text-decoration:none;">
+            https://www.bcmch.org
+        </a>
+    </p>
+
+    <p style="margin: 5px;">
+        For Technical Support: <b>itsupport@bcmch.org</b> &nbsp;<b>behive@bcmch.org</b>
+    </p>
+
+</footer>
+</body>
+
+</html>
