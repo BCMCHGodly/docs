@@ -90,7 +90,8 @@
   "username": "ituser1",
   "password": "it@1234",
   "clientId": "{ClientId}",
-  "clientSecret": "{ClientSecret}"
+  "clientSecret": "{ClientSecret}",
+   "systemIp": "{systemIp}"         
 }</pre>
 
         <h3>Request Parameters</h3>
@@ -174,7 +175,8 @@ class Program
             username = "ituser1",
             password = "it@1234",
             clientId = "{ClientId}",
-            clientSecret = "{ClientSecret}"
+            clientSecret = "{ClientSecret}",
+            systemIp = {IP}
         };
 
         using (HttpClient client = new HttpClient())
@@ -200,7 +202,8 @@ $data = [
     "username" => "ituser1",
     "password" => "it@1234",
     "clientId" => "{ClientId}",
-    "clientSecret" => "{ClientSecret}"
+    "clientSecret" => "{ClientSecret}",
+    "systemIp" => "{systemIp}"       
 ];
 
 $payload = json_encode($data);
@@ -233,7 +236,8 @@ const requestBody = {
   username: "ituser1",
   password: "it@1234",
   clientId: "{ClientId}",
-  clientSecret: "{ClientSecret}"
+  clientSecret: "{ClientSecret}",
+  systemIp : "{systemIp}"          
 };
 
 axios.post(url, requestBody, {
@@ -282,5 +286,6 @@ axios.post(url, requestBody, {
 
 </footer>
 </body>
+
 
 </html>
